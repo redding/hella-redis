@@ -1,5 +1,5 @@
 require "hella-redis/version"
+require "hella-redis/redis_connection"
 
 module HellaRedis
-  # TODO: your code goes here...
 end
