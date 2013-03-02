@@ -1,6 +1,7 @@
 require 'redis'
 require 'redis-namespace'
 require 'connection_pool'
+require 'hella-redis/version'
 
 module HellaRedis::RedisConnection
 
