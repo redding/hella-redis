@@ -6,11 +6,11 @@ require "hella-redis/version"
 Gem::Specification.new do |gem|
   gem.name        = "hella-redis"
   gem.version     = HellaRedis::VERSION
-  gem.authors     = ["TODO: authors"]
-  gem.email       = ["TODO: emails"]
-  gem.description = %q{TODO: Write a gem description}
-  gem.summary     = %q{TODO: Write a gem summary}
-  gem.homepage    = "http://github.com/__/hella-redis"
+  gem.authors     = ["Kelly Redding", "Collin Redding"]
+  gem.email       = ["kelly@kellyredding.com", "collin.redding@me.com"]
+  gem.description = %q{It's-a hella-redis!}
+  gem.summary     = %q{It's-a hella-redis!}
+  gem.homepage    = "http://github.com/redding/hella-redis"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
@@ -18,6 +18,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_development_dependency("assert")
-  # TODO: gem.add_dependency("gem-name", ["~> 0.0"])
 
 end

@@ -1,6 +1,6 @@
 # HellaRedis
 
-TODO: Write a gem description
+It's-a hella-redis!
 
 ## Usage
 
