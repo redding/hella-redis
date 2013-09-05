@@ -1,11 +1,12 @@
 require 'assert'
-require 'hella-redis/redis_connection'
+require 'hella-redis/connection'
+
 require 'connection_pool'
 require 'ostruct'
 
-module HellaRedis::RedisConnection
+module HellaRedis::Connection
 
-  class BaseTests < Assert::Context
+  class UnitTests < Assert::Context
     desc "a RedisConnection"
     setup do
       @config = OpenStruct.new({
@@ -15,19 +16,23 @@ module HellaRedis::RedisConnection
         :driver   => 'ruby',
         :url      => 'redis://localhost:6379/0'
       })
-      @conn = HellaRedis::RedisConnection.new(@config)
+      @conn = HellaRedis::Connection.new(@config)
     end
     subject{ @conn }
 
-    should "be a connection pool with the configured size and timeout" do
+    should "return a connection pool" do
       assert_kind_of ConnectionPool, subject
     end
 
-    should "connect to the redis url" do
+    should "connect to the redis instance that was provided" do
       assert_nothing_raised do
-        subject.with do |conn|
-          assert_kind_of Redis::Namespace, conn
-        end
+        subject.with{ |c| c.info }
+      end
+    end
+
+    should "build a redis namespace and yield it using #with" do
+      subject.with do |conn|
+        assert_kind_of Redis::Namespace, conn
       end
     end
 
