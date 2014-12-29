@@ -19,8 +19,8 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency("assert")
 
-  gem.add_dependency("redis",           ["~> 3.0"])
-  gem.add_dependency("redis-namespace", ["~> 1.0"])
+  gem.add_dependency("redis",           ["~> 3.2"])
+  gem.add_dependency("redis-namespace", ["~> 1.5"])
   gem.add_dependency("connection_pool", ["=  0.9.2"]) # temp, for 1.8.7 support
 
 end
