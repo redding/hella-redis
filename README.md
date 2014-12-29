@@ -4,18 +4,18 @@ It's-a hella-redis!
 
 ## Usage
 
-### RedisConnection
+### Connection
 
 ```ruby
 # config and create a connection
-@config = OpenStruct.new({
+@config = {
   :timeout  => 1,
   :size     => 5,
   :redis_ns => 'hella-redis-test',
   :driver   => 'ruby',
   :url      => 'redis://localhost:6379/0'
-})
-@conn = HellaRedis::RedisConnection.new(@config)
+}
+@conn = HellaRedis::Connection.new(@config)
 
 # it's actually a pool of connections
 @conn.with do |conn|
