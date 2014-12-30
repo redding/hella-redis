@@ -14,47 +14,61 @@ class HellaRedis::ConnectionSpy
     end
     subject{ @connection_spy }
 
-    should have_readers :config, :with_calls, :redis_calls
-    should have_imeths :with
+    should have_readers :config, :redis_spy, :with_calls
+    should have_imeths :with, :redis_calls
 
-    should "know its config" do
+    should "know its config and redis spy" do
       assert_equal @config, subject.config
+      assert_instance_of HellaRedis::RedisSpy, subject.redis_spy
     end
 
-    should "default its calls" do
+    should "default its with calls" do
       assert_equal [], subject.with_calls
-      assert_equal [], subject.redis_calls
     end
 
-    should "yield a redis spy using `with`" do
+    should "know its redis spy's calls" do
+      assert_same subject.redis_spy.calls, subject.redis_calls
+    end
+
+    should "yield its redis spy using `with`" do
       yielded = nil
       subject.with{ |c| yielded = c }
-      assert_instance_of RedisSpy, yielded
-      assert_same subject.redis_calls, yielded.calls
+      assert_same subject.redis_spy, yielded
     end
 
     should "track calls to with" do
       overrides = { :timeout => Factory.integer }
-      subject.with(overrides){ |c| }
+      block = proc{ |c| Factory.string }
+      subject.with(overrides, &block)
       call = subject.with_calls.last
       assert_equal [overrides], call.args
+      assert_equal block, call.block
+    end
+
+    should "allow passing a custom redis spy" do
+      redis_spy = Factory.string
+      spy = HellaRedis::ConnectionSpy.new(@config, redis_spy)
+      assert_equal redis_spy, spy.redis_spy
     end
 
   end
 
   class RedisSpyTests < UnitTests
-    desc "RedisSpy"
+    desc "HellaRedis::RedisSpy"
     setup do
-      @calls = []
-      @redis_spy = RedisSpy.new(@config, @calls)
+      @redis_spy = HellaRedis::RedisSpy.new(@config)
     end
     subject{ @redis_spy }
 
     should have_readers :calls
 
+    should "default its calls" do
+      assert_equal [], subject.calls
+    end
+
     should "allow passing a config object" do
       config = OpenStruct.new(@config)
-      assert_nothing_raised{ RedisSpy.new(config, @calls) }
+      assert_nothing_raised{ HellaRedis::RedisSpy.new(config) }
     end
 
     should "track redis calls made to it" do
