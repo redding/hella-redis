@@ -4,12 +4,18 @@ require 'hella-redis/connection_spy'
 class HellaRedis::ConnectionSpy
 
   class UnitTests < Assert::Context
-    desc "HellaRedis::ConnectionSpy"
     setup do
       @config = {
         :url    => 'redis://localhost:6379/0',
         :driver => 'ruby'
       }
+    end
+
+  end
+
+  class ConnectionSpyTests < UnitTests
+    desc "HellaRedis::ConnectionSpy"
+    setup do
       @connection_spy = HellaRedis::ConnectionSpy.new(@config)
     end
     subject{ @connection_spy }
