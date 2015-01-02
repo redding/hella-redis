@@ -57,11 +57,11 @@ module HellaRedis::Connection
     should have_readers :url, :driver, :redis_ns, :timeout, :size
 
     should "know its attributes" do
-      assert_equal @config_hash[:url],     subject.url
-      assert_equal @config_hash[:driver],  subject.driver
-      assert_equal @config_hash[:ns],      subject.redis_ns
-      assert_equal @config_hash[:timeout], subject.timeout
-      assert_equal @config_hash[:size],    subject.size
+      assert_equal @config_hash[:url],      subject.url
+      assert_equal @config_hash[:driver],   subject.driver
+      assert_equal @config_hash[:redis_ns], subject.redis_ns
+      assert_equal @config_hash[:timeout],  subject.timeout
+      assert_equal @config_hash[:size],     subject.size
     end
 
     should "default its size" do

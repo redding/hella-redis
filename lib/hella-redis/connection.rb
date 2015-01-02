@@ -24,7 +24,7 @@ module HellaRedis
       def initialize(args)
         @url      = args[:url]
         @driver   = args[:driver]
-        @redis_ns = args[:ns]
+        @redis_ns = args[:redis_ns]
         @timeout  = args[:timeout]
         @size     = args[:size] || 1
       end
