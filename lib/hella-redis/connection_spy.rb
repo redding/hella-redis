@@ -38,6 +38,16 @@ module HellaRedis
       @calls = []
     end
 
+    def pipelined
+      @calls << RedisCall.new(:pipelined, [])
+      yield self
+    end
+
+    def multi
+      @calls << RedisCall.new(:multi, [])
+      yield self
+    end
+
     def method_missing(name, *args, &block)
       if self.respond_to?(name)
         @calls << RedisCall.new(name, args, block)
