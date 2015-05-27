@@ -66,7 +66,7 @@ class HellaRedis::ConnectionSpy
     end
     subject{ @redis_spy }
 
-    should have_readers :calls
+    should have_readers :pipelined, :multi, :calls
 
     should "default its calls" do
       assert_equal [], subject.calls
@@ -86,6 +86,16 @@ class HellaRedis::ConnectionSpy
       call = subject.calls.first
       assert_equal :set, call.command
       assert_equal [key, value], call.args
+    end
+
+    should "track the call and yield itself using `pipelined`" do
+      subject.pipelined{ |c| c.set(Factory.string, Factory.string) }
+      assert_equal [:pipelined, :set], subject.calls.map(&:command)
+    end
+
+    should "track the call and yield itself using `multi`" do
+      subject.multi{ |c| c.set(Factory.string, Factory.string) }
+      assert_equal [:multi, :set], subject.calls.map(&:command)
     end
 
     should "raise no method errors for non-redis methods" do
