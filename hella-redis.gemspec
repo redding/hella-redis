@@ -8,16 +8,17 @@ Gem::Specification.new do |gem|
   gem.version     = HellaRedis::VERSION
   gem.authors     = ["Kelly Redding", "Collin Redding"]
   gem.email       = ["kelly@kellyredding.com", "collin.redding@me.com"]
-  gem.description = %q{It's-a hella-redis!}
   gem.summary     = %q{It's-a hella-redis!}
+  gem.description = %q{It's-a hella-redis!}
   gem.homepage    = "http://github.com/redding/hella-redis"
+  gem.license     = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_development_dependency("assert")
+  gem.add_development_dependency("assert", ["~> 2.15.1"])
 
   gem.add_dependency("redis",           ["~> 3.2"])
   gem.add_dependency("redis-namespace", ["~> 1.5"])
