@@ -2,24 +2,55 @@
 
 It's-a hella-redis!
 
+This gem is a wrapper that builds a connection pool of redis connections.  It also provides spies and test mode behavior to ease testing redis interactions.
+
 ## Usage
 
-### Connection
-
 ```ruby
-# config and create a connection
-@config = {
+# create
+@redis = HellaRedis.new({
   :timeout  => 1,
   :size     => 5,
   :redis_ns => 'hella-redis-test',
   :driver   => 'ruby',
   :url      => 'redis://localhost:6379/0'
-}
-@conn = HellaRedis::Connection.new(@config)
+}) # => HellaRedis:ConnectionPool instance
 
 # it's actually a pool of connections
-@conn.with do |conn|
-  # get a connection and do something with it
+@redis.connection do |connection|
+  # checks out a connection so you can do something with it
+  # will check it back in once the block has run
+end
+```
+
+### Test Mode
+
+```ruby
+ENV['HELLA_REDIS_TEST_MODE'] = 'yes' # set to anything "truthy"
+
+@redis_spy = HellaRedis.new({
+  :timeout  => 1,
+  :size     => 5,
+  :redis_ns => 'hella-redis-test',
+  :driver   => 'ruby',
+  :url      => 'redis://localhost:6379/0'
+}) # => HellaRedis::ConnectionPoolSpy instance
+
+@redis_spy.connection do |connection_spy|
+  connection_spy # => HellaRedis::ConnectionSpy instance
+  connection_spy.info
+end
+
+@redis_spy.calls.size # => 1
+@redis_spy.calls.first.tap do |call|
+  call.command # => 'info'
+  call.args    # => nil
+  call.block   # => nil
+end
+
+@redis_spy.connection_calls.size # => 1
+@redis_spy.connection_calls.first.tap do |connection_call|
+  connection_call.block # => block instance
 end
 ```
 
