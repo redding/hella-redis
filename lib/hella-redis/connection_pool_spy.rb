@@ -28,6 +28,12 @@ module HellaRedis
       @connection_spy.calls = []
     end
 
+    def ==(other_pool_spy)
+      if other_pool_spy.kind_of?(ConnectionPoolSpy)
+        self.config == other_pool_spy.config
+      end
+    end
+
     ConnectionCall = Struct.new(:block)
 
   end

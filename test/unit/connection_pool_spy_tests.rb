@@ -63,6 +63,14 @@ class HellaRedis::ConnectionPoolSpy
       assert_empty subject.connection_calls
     end
 
+    should "know if it is equal to another pool spy" do
+      equal_pool_spy = HellaRedis::ConnectionPoolSpy.new(@config)
+      assert_equal subject, equal_pool_spy
+
+      not_equal_config = HellaRedis::ConnectionPoolSpy.new(Factory.config)
+      assert_not_equal subject, not_equal_config
+    end
+
   end
 
 end

@@ -9,9 +9,9 @@ module Factory
   end
 
   def self.config_args(args = nil)
-    { :timeout  => 1,
-      :size     => 5,
-      :redis_ns => 'hella-redis-test',
+    { :timeout  => Factory.integer,
+      :size     => Factory.integer(5),
+      :redis_ns => "hella-redis-test-#{Factory.string}",
       :url      => 'redis://localhost:6379/0',
       :driver   => 'ruby'
     }.merge(args || {})
