@@ -23,6 +23,11 @@ module HellaRedis
       block.call(@connection_spy)
     end
 
+    def reset!
+      @connection_calls     = []
+      @connection_spy.calls = []
+    end
+
     ConnectionCall = Struct.new(:block)
 
   end
