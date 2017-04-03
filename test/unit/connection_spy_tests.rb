@@ -10,7 +10,7 @@ class HellaRedis::ConnectionSpy
     end
     subject{ @connection_spy }
 
-    should have_readers :calls
+    should have_accessors :calls
     should have_imeths :pipelined, :multi
 
     should "default its calls" do

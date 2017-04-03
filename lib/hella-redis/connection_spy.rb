@@ -4,7 +4,7 @@ module HellaRedis
 
   class ConnectionSpy
 
-    attr_reader :calls
+    attr_accessor :calls
 
     def initialize(config)
       @instance = ::Redis.new({

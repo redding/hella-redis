@@ -19,7 +19,7 @@ class HellaRedis::ConnectionPoolSpy
     subject{ @connection_pool_spy }
 
     should have_readers :config, :connection_spy, :connection_calls
-    should have_imeths :calls, :connection
+    should have_imeths :calls, :connection, :reset!
 
     should "know its config and redis spy" do
       assert_equal @config, subject.config
@@ -49,6 +49,18 @@ class HellaRedis::ConnectionPoolSpy
 
       call = subject.connection_calls.last
       assert_equal block, call.block
+    end
+
+    should "remove all calls on `reset!`" do
+      subject.connection{ |c| c.info }
+
+      assert_not_empty subject.calls
+      assert_not_empty subject.connection_calls
+
+      subject.reset!
+
+      assert_empty subject.calls
+      assert_empty subject.connection_calls
     end
 
   end
