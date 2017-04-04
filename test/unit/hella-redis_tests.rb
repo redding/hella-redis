@@ -11,31 +11,36 @@ module HellaRedis
     end
     subject{ @module }
 
-    should have_imeths :new
+    should have_imeths :new, :real, :mock
 
   end
 
-  class NewTests < UnitTests
-    desc "`new`"
+  class NewRealMockTests < UnitTests
     setup do
-      @current_test_mode = ENV['HELLA_REDIS_TEST_MODE']
-      ENV['HELLA_REDIS_TEST_MODE'] = 'yes'
-
       @config = Config.new(@config_args)
 
-      @pool     = ConnectionPool.new(@config)
-      @pool_spy = ConnectionPoolSpy.new(@config)
-
+      @pool = ConnectionPool.new(@config)
       @pool_new_called_with = nil
       Assert.stub(ConnectionPool, :new) do |*args|
         @pool_new_called_with = args
         @pool
       end
+
+      @pool_spy = ConnectionPoolSpy.new(@config)
       @pool_spy_new_called_with = nil
       Assert.stub(ConnectionPoolSpy, :new) do |*args|
         @pool_spy_new_called_with = args
         @pool_spy
       end
+    end
+
+  end
+
+  class NewTests < NewRealMockTests
+    desc "`new`"
+    setup do
+      @current_test_mode = ENV['HELLA_REDIS_TEST_MODE']
+      ENV['HELLA_REDIS_TEST_MODE'] = 'yes'
     end
     teardown do
       ENV['HELLA_REDIS_TEST_MODE'] = @current_test_mode
@@ -49,8 +54,32 @@ module HellaRedis
       assert_equal @pool, redis
     end
 
-    should "build and return a download spy in test mode" do
+    should "build and return a connection pool spy in test mode" do
       redis = subject.new(@config_args)
+
+      assert_equal [@config], @pool_spy_new_called_with
+      assert_equal @pool_spy, redis
+    end
+
+  end
+
+  class RealTests < NewRealMockTests
+    desc "`real`"
+
+    should "build and return a connection pool spy" do
+      redis = subject.real(@config_args)
+
+      assert_equal [@config], @pool_new_called_with
+      assert_equal @pool, redis
+    end
+
+  end
+
+  class MockTests < NewRealMockTests
+    desc "`mock`"
+
+    should "build and return a connection pool spy" do
+      redis = subject.mock(@config_args)
 
       assert_equal [@config], @pool_spy_new_called_with
       assert_equal @pool_spy, redis

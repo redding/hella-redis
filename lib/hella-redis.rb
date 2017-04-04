@@ -5,9 +5,15 @@ require 'hella-redis/connection_pool_spy'
 module HellaRedis
 
   def self.new(args)
-    (ENV['HELLA_REDIS_TEST_MODE'] ? ConnectionPoolSpy : ConnectionPool).new(
-      Config.new(args)
-    )
+    self.send(ENV['HELLA_REDIS_TEST_MODE'] ? :mock : :real, args)
+  end
+
+  def self.real(args)
+    ConnectionPool.new(Config.new(args))
+  end
+
+  def self.mock(args)
+    ConnectionPoolSpy.new(Config.new(args))
   end
 
   class Config
