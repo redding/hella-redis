@@ -36,14 +36,14 @@ ENV['HELLA_REDIS_TEST_MODE'] = 'yes' # set to anything "truthy"
   :url      => 'redis://localhost:6379/0'
 }) # => HellaRedis::ConnectionPoolSpy instance
 
-@redis_spy.connection do |connection_spy|
-  connection_spy # => HellaRedis::ConnectionSpy instance
-  connection_spy.info
+@redis_spy.connection do |connection|
+  connection # => HellaRedis::ConnectionSpy instance
+  connection.info
 end
 
 @redis_spy.calls.size # => 1
 @redis_spy.calls.first.tap do |call|
-  call.command # => 'info'
+  call.command # => :info
   call.args    # => nil
   call.block   # => nil
 end
@@ -52,6 +52,13 @@ end
 @redis_spy.connection_calls.first.tap do |connection_call|
   connection_call.block # => block instance
 end
+
+Assert.stub(@redis_spy.connection_spy, :get).with('some-key'){ 'some-value' }
+value = @redis_spy.connection do |connection|
+  connection.get('some_key')
+end
+assert_equal 'some-value', value
+@redis_spy.calls.size # => 1 (unchanged b/c we stubbed the :get method)
 ```
 
 ## Installation
