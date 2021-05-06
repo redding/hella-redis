@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = "~> 2.5"
 
-  gem.add_development_dependency("assert", ["~> 2.16.3"])
+  gem.add_development_dependency("assert", ["~> 2.19.6"])
 
   gem.add_dependency("redis",           ["~> 3.2"])
   gem.add_dependency("redis-namespace", ["~> 1.5"])

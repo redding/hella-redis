@@ -21,15 +21,15 @@ module HellaRedis
 
       @pool = ConnectionPool.new(@config)
       @pool_new_called_with = nil
-      Assert.stub(ConnectionPool, :new) do |*args|
-        @pool_new_called_with = args
+      Assert.stub_on_call(ConnectionPool, :new) do |call|
+        @pool_new_call = call
         @pool
       end
 
       @pool_spy = ConnectionPoolSpy.new(@config)
       @pool_spy_new_called_with = nil
-      Assert.stub(ConnectionPoolSpy, :new) do |*args|
-        @pool_spy_new_called_with = args
+      Assert.stub_on_call(ConnectionPoolSpy, :new) do |call|
+        @pool_spy_new_call = call
         @pool_spy
       end
     end
@@ -49,15 +49,15 @@ module HellaRedis
       ENV.delete("HELLA_REDIS_TEST_MODE")
       redis = subject.new(@config_args)
 
-      assert_equal [@config], @pool_new_called_with
-      assert_equal @pool, redis
+      assert_that(@pool_new_call.args).equals([@config])
+      assert_that(redis).equals(@pool)
     end
 
     should "build and return a connection pool spy in test mode" do
       redis = subject.new(@config_args)
 
-      assert_equal [@config], @pool_spy_new_called_with
-      assert_equal @pool_spy, redis
+      assert_that(@pool_spy_new_call.args).equals([@config])
+      assert_that(redis).equals(@pool_spy)
     end
   end
 
@@ -67,8 +67,8 @@ module HellaRedis
     should "build and return a connection pool spy" do
       redis = subject.real(@config_args)
 
-      assert_equal [@config], @pool_new_called_with
-      assert_equal @pool, redis
+      assert_that(@pool_new_call.args).equals([@config])
+      assert_that(redis).equals(@pool)
     end
   end
 
@@ -78,8 +78,8 @@ module HellaRedis
     should "build and return a connection pool spy" do
       redis = subject.mock(@config_args)
 
-      assert_equal [@config], @pool_spy_new_called_with
-      assert_equal @pool_spy, redis
+      assert_that(@pool_spy_new_call.args).equals([@config])
+      assert_that(redis).equals(@pool_spy)
     end
   end
 
@@ -93,25 +93,25 @@ module HellaRedis
     should have_readers :url, :driver, :redis_ns, :timeout, :size
 
     should "know its attributes" do
-      assert_equal @config_args[:url],      subject.url
-      assert_equal @config_args[:driver],   subject.driver
-      assert_equal @config_args[:redis_ns], subject.redis_ns
-      assert_equal @config_args[:timeout],  subject.timeout
-      assert_equal @config_args[:size],     subject.size
+      assert_that(subject.url).equals(@config_args[:url])
+      assert_that(subject.driver).equals(@config_args[:driver])
+      assert_that(subject.redis_ns).equals(@config_args[:redis_ns])
+      assert_that(subject.timeout).equals(@config_args[:timeout])
+      assert_that(subject.size).equals(@config_args[:size])
     end
 
     should "default its size" do
       @config_args.delete(:size)
       config = Config.new(@config_args)
-      assert_equal 1, config.size
+      assert_that(config.size).equals(1)
     end
 
     should "know if it is equal to another config" do
       equal_config = Config.new(@config_args)
-      assert_equal subject, equal_config
+      assert_that(subject).equals(equal_config)
 
       not_equal_config = Config.new
-      assert_not_equal subject, not_equal_config
+      assert_that(subject).does_not_equal(not_equal_config)
     end
   end
 end

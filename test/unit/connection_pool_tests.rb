@@ -17,8 +17,8 @@ class HellaRedis::ConnectionPool
 
     should "build a redis namespace and yield it using `connection`" do
       subject.connection do |connection|
-        assert_instance_of ::Redis::Namespace, connection
-        assert_nothing_raised{ connection.get(Factory.string) }
+        assert_that(connection).is_an_instance_of(::Redis::Namespace)
+        assert_that{ connection.get(Factory.string) }.does_not_raise
       end
     end
   end

@@ -57,7 +57,7 @@ Assert.stub(@redis_spy.connection_spy, :get).with("some-key"){ "some-value" }
 value = @redis_spy.connection do |connection|
   connection.get("some_key")
 end
-assert_equal "some-value", value
+assert_that("some-value").equals(value)
 @redis_spy.calls.size # => 1 (unchanged b/c we stubbed the :get method)
 ```
 
