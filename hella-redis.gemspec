@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency("assert", ["~> 2.19.6"])
   gem.add_development_dependency("much-style-guide", ["~> 0.6.3"])
 
-  gem.add_dependency("redis",           ["~> 3.2"])
-  gem.add_dependency("redis-namespace", ["~> 1.5"])
-  gem.add_dependency("connection_pool", ["=  0.9.2"]) # temp, for 1.8.7 support
+  gem.add_dependency("redis",           ["~> 4.2.5"])
+  gem.add_dependency("redis-namespace", ["~> 1.8.1"])
+  gem.add_dependency("connection_pool", ["~> 2.2.5"])
 end
