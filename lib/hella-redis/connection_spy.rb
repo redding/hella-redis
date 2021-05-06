@@ -1,9 +1,9 @@
-require 'redis'
+# frozen_string_literal: true
+
+require "redis"
 
 module HellaRedis
-
   class ConnectionSpy
-
     attr_accessor :calls
 
     def initialize(config)
@@ -37,7 +37,5 @@ module HellaRedis
     end
 
     ConnectionCall = Struct.new(:command, :args, :block)
-
   end
-
 end

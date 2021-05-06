@@ -1,11 +1,12 @@
-require 'hella-redis/version'
-require 'hella-redis/connection_pool'
-require 'hella-redis/connection_pool_spy'
+# frozen_string_literal: true
+
+require "hella-redis/version"
+require "hella-redis/connection_pool"
+require "hella-redis/connection_pool_spy"
 
 module HellaRedis
-
   def self.new(args)
-    self.send(ENV['HELLA_REDIS_TEST_MODE'] ? :mock : :real, args)
+    self.send(ENV["HELLA_REDIS_TEST_MODE"] ? :mock : :real, args)
   end
 
   def self.real(args)
@@ -17,7 +18,6 @@ module HellaRedis
   end
 
   class Config
-
     attr_reader :url, :driver, :redis_ns, :timeout, :size
 
     def initialize(args = nil)
@@ -40,7 +40,5 @@ module HellaRedis
         super
       end
     end
-
   end
-
 end

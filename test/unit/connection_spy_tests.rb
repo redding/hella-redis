@@ -1,8 +1,9 @@
-require 'assert'
-require 'hella-redis/connection_spy'
+# frozen_string_literal: true
+
+require "assert"
+require "hella-redis/connection_spy"
 
 class HellaRedis::ConnectionSpy
-
   class UnitTests < Assert::Context
     desc "HellaRedis::ConnectionSpy"
     setup do
@@ -44,7 +45,5 @@ class HellaRedis::ConnectionSpy
         subject.super_awesome_set(Factory.string, Factory.string)
       end
     end
-
   end
-
 end

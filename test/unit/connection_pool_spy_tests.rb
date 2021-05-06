@@ -1,10 +1,11 @@
-require 'assert'
-require 'hella-redis/connection_pool_spy'
+# frozen_string_literal: true
 
-require 'hella-redis/connection_spy'
+require "assert"
+require "hella-redis/connection_pool_spy"
+
+require "hella-redis/connection_spy"
 
 class HellaRedis::ConnectionPoolSpy
-
   class UnitTests < Assert::Context
     desc "HellaRedis::ConnectionPoolSpy"
     setup do
@@ -70,7 +71,5 @@ class HellaRedis::ConnectionPoolSpy
       not_equal_config = HellaRedis::ConnectionPoolSpy.new(Factory.config)
       assert_not_equal subject, not_equal_config
     end
-
   end
-
 end

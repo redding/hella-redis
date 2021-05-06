@@ -1,11 +1,11 @@
-require 'redis'
-require 'hella-redis/connection_pool'
-require 'hella-redis/connection_spy'
+# frozen_string_literal: true
+
+require "redis"
+require "hella-redis/connection_pool"
+require "hella-redis/connection_spy"
 
 module HellaRedis
-
   class ConnectionPoolSpy
-
     attr_reader :config, :connection_spy, :connection_calls
 
     def initialize(config)
@@ -35,7 +35,5 @@ module HellaRedis
     end
 
     ConnectionCall = Struct.new(:block)
-
   end
-
 end

@@ -1,10 +1,11 @@
-require 'assert'
-require 'hella-redis/connection_pool'
+# frozen_string_literal: true
 
-require 'redis-namespace'
+require "assert"
+require "hella-redis/connection_pool"
+
+require "redis-namespace"
 
 class HellaRedis::ConnectionPool
-
   class UnitTests < Assert::Context
     desc "HellaRedis::Connection"
     setup do
@@ -20,7 +21,5 @@ class HellaRedis::ConnectionPool
         assert_nothing_raised{ connection.get(Factory.string) }
       end
     end
-
   end
-
 end
