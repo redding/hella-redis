@@ -10,12 +10,12 @@ Gem::Specification.new do |gem|
   gem.version     = HellaRedis::VERSION
   gem.authors     = ["Kelly Redding", "Collin Redding"]
   gem.email       = ["kelly@kellyredding.com", "collin.redding@me.com"]
-  gem.summary     = %q{It's-a hella-redis!}
-  gem.description = %q{It's-a hella-redis!}
+  gem.summary     = "It's-a hella-redis!"
+  gem.description = "It's-a hella-redis!"
   gem.homepage    = "http://github.com/redding/hella-redis"
   gem.license     = "MIT"
 
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = "~> 2.5"
 
   gem.add_development_dependency("assert", ["~> 2.19.6"])
+  gem.add_development_dependency("much-style-guide", ["~> 0.6.3"])
 
   gem.add_dependency("redis",           ["~> 3.2"])
   gem.add_dependency("redis-namespace", ["~> 1.5"])

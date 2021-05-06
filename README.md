@@ -8,13 +8,14 @@ This gem is a wrapper that builds a connection pool of redis connections.  It al
 
 ```ruby
 # create
-@redis = HellaRedis.new(
-  timeout:  1,
-  size:     5,
-  redis_ns: "hella-redis-test",
-  driver:   "ruby",
-  url:      "redis://localhost:6379/0"
-) # => HellaRedis:ConnectionPool instance
+@redis =
+  HellaRedis.new(
+    timeout:  1,
+    size:     5,
+    redis_ns: "hella-redis-test",
+    driver:   "ruby",
+    url:      "redis://localhost:6379/0"
+  ) # => HellaRedis:ConnectionPool instance
 
 # it's actually a pool of connections
 @redis.connection do |connection|
@@ -28,13 +29,14 @@ end
 ```ruby
 ENV["HELLA_REDIS_TEST_MODE"] = "yes" # set to anything "truthy"
 
-@redis_spy = HellaRedis.new({
-  timeout:  1,
-  size:     5,
-  redis_ns: "hella-redis-test",
-  driver:   "ruby",
-  url:      "redis://localhost:6379/0"
-}) # => HellaRedis::ConnectionPoolSpy instance
+@redis_spy =
+  HellaRedis.new({
+    timeout:  1,
+    size:     5,
+    redis_ns: "hella-redis-test",
+    driver:   "ruby",
+    url:      "redis://localhost:6379/0"
+  }) # => HellaRedis::ConnectionPoolSpy instance
 
 @redis_spy.connection do |connection|
   connection # => HellaRedis::ConnectionSpy instance
