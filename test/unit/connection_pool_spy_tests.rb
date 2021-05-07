@@ -1,16 +1,16 @@
-require 'assert'
-require 'hella-redis/connection_pool_spy'
+# frozen_string_literal: true
 
-require 'hella-redis/connection_spy'
+require "assert"
+require "hella-redis/connection_pool_spy"
+
+require "hella-redis/connection_spy"
 
 class HellaRedis::ConnectionPoolSpy
-
   class UnitTests < Assert::Context
     desc "HellaRedis::ConnectionPoolSpy"
     setup do
-      Assert.stub(HellaRedis::ConnectionSpy, :new) do |*args|
-        @connection_spy_created_with = args
-        Assert.stub_send(HellaRedis::ConnectionSpy, :new, *args)
+      Assert.stub_tap_on_call(HellaRedis::ConnectionSpy, :new) do |_, call|
+        @connection_spy_new_call = call
       end
 
       @config              = Factory.config
@@ -22,55 +22,53 @@ class HellaRedis::ConnectionPoolSpy
     should have_imeths :calls, :connection, :reset!
 
     should "know its config and redis spy" do
-      assert_equal @config, subject.config
-      assert_instance_of HellaRedis::ConnectionSpy, subject.connection_spy
-      exp = [@config]
-      assert_equal exp, @connection_spy_created_with
+      assert_that(subject.config).is(@config)
+      assert_that(subject.connection_spy)
+        .is_an_instance_of(HellaRedis::ConnectionSpy)
+      assert_that(@connection_spy_new_call.args).equals([@config])
     end
 
     should "default its connection calls" do
-      assert_equal [], subject.connection_calls
+      assert_that(subject.connection_calls).equals([])
     end
 
     should "know its calls" do
-      assert_same subject.connection_spy.calls, subject.calls
+      assert_that(subject.calls).is(subject.connection_spy.calls)
     end
 
     should "yield its connection spy using `connection`" do
       yielded = nil
       subject.connection{ |c| yielded = c }
 
-      assert_same subject.connection_spy, yielded
+      assert_that(yielded).is(subject.connection_spy)
     end
 
     should "track calls to connection" do
-      block = proc{ |c| Factory.string }
+      block = proc{ |_c| Factory.string }
       subject.connection(&block)
 
       call = subject.connection_calls.last
-      assert_equal block, call.block
+      assert_that(call.block).is(block)
     end
 
     should "remove all calls on `reset!`" do
-      subject.connection{ |c| c.info }
+      subject.connection(&:info)
 
-      assert_not_empty subject.calls
-      assert_not_empty subject.connection_calls
+      assert_that(subject.calls.empty?).is_false
+      assert_that(subject.connection_calls.empty?).is_false
 
       subject.reset!
 
-      assert_empty subject.calls
-      assert_empty subject.connection_calls
+      assert_that(subject.calls.empty?).is_true
+      assert_that(subject.connection_calls.empty?).is_true
     end
 
     should "know if it is equal to another pool spy" do
       equal_pool_spy = HellaRedis::ConnectionPoolSpy.new(@config)
-      assert_equal subject, equal_pool_spy
+      assert_that(equal_pool_spy).equals(subject)
 
       not_equal_config = HellaRedis::ConnectionPoolSpy.new(Factory.config)
-      assert_not_equal subject, not_equal_config
+      assert_that(not_equal_config).does_not_equal(subject)
     end
-
   end
-
 end

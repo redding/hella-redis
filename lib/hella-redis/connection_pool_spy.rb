@@ -1,11 +1,11 @@
-require 'redis'
-require 'hella-redis/connection_pool'
-require 'hella-redis/connection_spy'
+# frozen_string_literal: true
+
+require "redis"
+require "hella-redis/connection_pool"
+require "hella-redis/connection_spy"
 
 module HellaRedis
-
   class ConnectionPoolSpy
-
     attr_reader :config, :connection_spy, :connection_calls
 
     def initialize(config)
@@ -28,14 +28,10 @@ module HellaRedis
       @connection_spy.calls = []
     end
 
-    def ==(other_pool_spy)
-      if other_pool_spy.kind_of?(ConnectionPoolSpy)
-        self.config == other_pool_spy.config
-      end
+    def ==(other)
+      config == other.config if other.is_a?(ConnectionPoolSpy)
     end
 
     ConnectionCall = Struct.new(:block)
-
   end
-
 end
